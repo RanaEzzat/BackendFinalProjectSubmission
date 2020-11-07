@@ -21,19 +21,19 @@ public class ProductController {
         return productService.getProduct(id);
     }
 
-    @RequestMapping(method= RequestMethod.POST, value="/products")
+    @RequestMapping(method= RequestMethod.POST, value="/products")//change it to admin
     public void addProduct(@RequestBody Product product)
     {
         productService.addProduct(product);
     }
 
-    @RequestMapping(method= RequestMethod.PUT, value="/products/{id}")
+    @RequestMapping(method= RequestMethod.PUT, value="/products/{id}")//change it to admin
     public void updateProduct(@RequestBody Product product, @PathVariable Integer id)
     {
         productService.updateProduct(id,product);
     }
 
-    @RequestMapping(method= RequestMethod.DELETE, value="/products/{id}")
+    @RequestMapping(method= RequestMethod.DELETE, value="/products/{id}")//change it to admin
     public void deleteProduct(@PathVariable Integer id)
     {
         productService.deleteProduct(id);
