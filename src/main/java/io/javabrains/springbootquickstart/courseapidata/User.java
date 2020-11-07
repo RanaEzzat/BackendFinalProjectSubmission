@@ -1,12 +1,14 @@
 package io.javabrains.springbootquickstart.courseapidata;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
     @Column(name="userName")
@@ -17,6 +19,18 @@ public class User {
     private boolean active;
     @Column(name="roles")
     private String roles;
+    @OneToMany
+    private List<Order> orders = new ArrayList<>();
+
+
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
     public int getId() {
         return id;

@@ -1,8 +1,10 @@
 package io.javabrains.springbootquickstart.courseapidata;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Table(name = "product")
 public class Product {
 
     //Id annotation means that this is the primary key
@@ -21,26 +23,28 @@ public class Product {
     private String image;
     @Column(name="calories")
     private int calories;
+    @ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "products")
+    private List<Order> orders;
 
     public Product()
     {
 
     }
-
-    public Product(Integer id, String name, String description, int price, String image, int calories) {
+    public Product(Integer id, String name, String description, int price, String image, int calories, List<Order> orders) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.image = image;
         this.calories = calories;
+        this.orders = orders;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -82,5 +86,13 @@ public class Product {
 
     public void setCalories(int calories) {
         this.calories = calories;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

@@ -12,9 +12,6 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    private List<Product> orders = new ArrayList<>(Arrays.asList(
-            ));
-
     public List<Order> getAllOrders()
     {
         List<Order> orders = new ArrayList<>();
