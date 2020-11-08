@@ -11,6 +11,7 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+    private UserService userService;
 
 
     public List<Product> getAllProducts()
@@ -28,16 +29,16 @@ public class ProductService {
 
     public void addProduct(Product product)
     {
-        productRepository.save(product);
+            productRepository.save(product);
     }
 
-    public void updateProduct(Integer id, Product product)
+    public void updateProduct(Integer id,Product product)
     {
-        productRepository.save(product);
+            productRepository.save(product);
     }
 
     public void deleteProduct(Integer id)
     {
-        productRepository.deleteById(id);
+            productRepository.deleteById(id);
     }
 }

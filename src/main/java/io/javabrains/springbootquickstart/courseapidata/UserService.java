@@ -1,5 +1,6 @@
 package io.javabrains.springbootquickstart.courseapidata;
 
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,8 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    private OrderRepository orderRepository;
+    private OrderService orderService;
 
     private List<User> users = new ArrayList<>(Arrays.asList(
             ));
@@ -42,4 +45,7 @@ public class UserService {
     {
         userRepository.deleteById(id);
     }
+
+   
+
 }

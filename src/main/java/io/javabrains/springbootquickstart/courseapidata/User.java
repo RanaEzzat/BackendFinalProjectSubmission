@@ -71,4 +71,30 @@ public class User {
     public void setRoles(String roles) {
         this.roles = roles;
     }
+
+    public boolean isUser()
+    {
+        String[] userRoles =(roles).split(",");
+        for(int i=0;i<userRoles.length;i++)
+        {
+            if(userRoles[i].contains("ROLE_USER"))
+            {
+               return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isAdmin()
+    {
+        String[] userRoles =(roles).split(",");
+        for(int i=0;i<userRoles.length;i++)
+        {
+            if(userRoles[i].contains("ROLE_ADMIN"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

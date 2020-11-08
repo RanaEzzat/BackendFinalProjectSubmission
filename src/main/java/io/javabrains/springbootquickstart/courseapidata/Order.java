@@ -27,11 +27,13 @@ public class Order {
     {
 
     }
-    public Order(int id, String type, String total) {
-        super();
+
+    public Order(int id, String type, String total, User user, List<Product> products) {
         this.id = id;
         this.type = type;
         this.total = total;
+        this.user = user;
+        this.products = products;
     }
 
     public int getId() {
