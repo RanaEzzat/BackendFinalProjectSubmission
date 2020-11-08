@@ -19,7 +19,7 @@ public class User {
     private boolean active;
     @Column(name="roles")
     private String roles;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
 
@@ -72,14 +72,14 @@ public class User {
         this.roles = roles;
     }
 
-    public boolean isUser()
+    /*public boolean isUser()
     {
         String[] userRoles =(roles).split(",");
         for(int i=0;i<userRoles.length;i++)
         {
             if(userRoles[i].contains("ROLE_USER"))
             {
-               return true;
+                return true;
             }
         }
         return false;
@@ -96,5 +96,5 @@ public class User {
             }
         }
         return false;
-    }
+    }*/
 }

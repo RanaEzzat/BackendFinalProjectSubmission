@@ -15,12 +15,8 @@ public class Order {
     private String type;
     @Column(name="total")
     private String total;
-    @ManyToOne
-    private User user;
-    @ManyToMany(fetch=FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinTable(name="order_product",
-            joinColumns = {@JoinColumn(name="order_id")},
-            inverseJoinColumns = { @JoinColumn(name="product_id")})
+
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 
     public Order()
@@ -28,11 +24,10 @@ public class Order {
 
     }
 
-    public Order(int id, String type, String total, User user, List<Product> products) {
+    public Order(int id, String type, String total, List<Product> products) {
         this.id = id;
         this.type = type;
         this.total = total;
-        this.user = user;
         this.products = products;
     }
 
@@ -60,13 +55,6 @@ public class Order {
         this.total = total;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public List<Product> getProducts() {
         return products;

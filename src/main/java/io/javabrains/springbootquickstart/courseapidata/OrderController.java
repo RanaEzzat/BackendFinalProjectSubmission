@@ -9,6 +9,7 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+
     @RequestMapping("/admin/orders")
     public List<Order> getAllOrders()
     {
@@ -21,24 +22,34 @@ public class OrderController {
         return orderService.getOrder(id);
     }
 
-    //Create the mappers for the new services here
-/*
-    @RequestMapping(method= RequestMethod.POST, value="/user/orders")//change it to admin
-    public void addOrder(@RequestBody Order order)
+    @RequestMapping(method= RequestMethod.PUT, value="user/{user_id}/product/{product_id}")//change it to admin
+    public void addToCart(@PathVariable Integer user_id,@PathVariable Integer product_id)
     {
-        orderService.addOrder(order);
+        orderService.addToCart(user_id,product_id);
     }
 
-    @RequestMapping(method= RequestMethod.PUT, value="/user/orders/{order_id}")
-    public void updateOrder(@RequestBody Order order,@PathVariable Integer id)
+    @RequestMapping(method= RequestMethod.GET,value="/user/{user_id}/order")
+    public Order getUserCartOrder(@PathVariable Integer user_id)
     {
-        orderService.updateOrder(id,order);
+        return orderService.getUserCartOrder(user_id);
     }
 
-    @RequestMapping(method= RequestMethod.DELETE, value="/user/orders/{id}")
-    public void deleteOrder(@PathVariable Integer user_id,@PathVariable Integer id)
+    @RequestMapping(method= RequestMethod.DELETE, value="user/{user_id}/order/{product_id}")//change it to admin
+    public void removeFromCart(@PathVariable Integer user_id,@PathVariable Integer product_id)
     {
-        orderService.deleteOrder(id);
-    }*/
+        orderService.removeFromCart(user_id,product_id);
+    }
+
+    @RequestMapping(method= RequestMethod.GET,value="/user/{user_id}/order_history")
+    public List<Order> getAllUserOrders(@PathVariable Integer user_id)
+    {
+        return orderService.getAllUserOrders(user_id);
+    }
+
+    @RequestMapping(method= RequestMethod.PUT, value="user/{user_id}/order")
+    public void checkOutOrder(@PathVariable Integer user_id)
+    {
+        orderService.checkOutOrder(user_id);
+    }
 
 }

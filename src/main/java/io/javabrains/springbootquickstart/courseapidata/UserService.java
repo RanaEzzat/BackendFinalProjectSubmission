@@ -12,8 +12,7 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    private OrderRepository orderRepository;
-    private OrderService orderService;
+
 
     private List<User> users = new ArrayList<>(Arrays.asList(
             ));
@@ -33,8 +32,18 @@ public class UserService {
 
     public void addUser(User user)
     {
-        userRepository.save(user);
+        boolean flag=false;
+        List<User> users=getAllUsers();
+        for(int i=0;i<users.size();i++)
+        {
+            if(user.getUserName()==users.get(i).getUserName()&&user.getId()!=users.get(i).getId())
+                flag=true;
+        }
+        if(!flag)
+            userRepository.save(user);
+        //if flag==true the username is already taken
     }
+
 
     public void updateUser(Integer id, User user)
     {
@@ -46,6 +55,6 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-   
+
 
 }
