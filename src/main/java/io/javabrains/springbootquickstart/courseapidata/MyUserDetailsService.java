@@ -1,5 +1,7 @@
 package io.javabrains.springbootquickstart.courseapidata;
 
+import io.javabrains.springbootquickstart.courseapidata.models.User;
+import io.javabrains.springbootquickstart.courseapidata.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,5 +1,6 @@
-package io.javabrains.springbootquickstart.courseapidata;
+package io.javabrains.springbootquickstart.courseapidata.repositories;
 
+import io.javabrains.springbootquickstart.courseapidata.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

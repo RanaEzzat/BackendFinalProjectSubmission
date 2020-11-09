@@ -1,4 +1,4 @@
-package io.javabrains.springbootquickstart.courseapidata;
+package io.javabrains.springbootquickstart.courseapidata.models;
 
 import javax.persistence.*;
 import java.util.List;

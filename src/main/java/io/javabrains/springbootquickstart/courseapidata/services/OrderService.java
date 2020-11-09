@@ -1,11 +1,19 @@
-package io.javabrains.springbootquickstart.courseapidata;
+package io.javabrains.springbootquickstart.courseapidata.services;
 
+import io.javabrains.springbootquickstart.courseapidata.errors.OrderDoesNotExistException;
+import io.javabrains.springbootquickstart.courseapidata.errors.ProductDoesNotExistException;
+import io.javabrains.springbootquickstart.courseapidata.errors.UserDoesNotExistException;
+import io.javabrains.springbootquickstart.courseapidata.models.Order;
+import io.javabrains.springbootquickstart.courseapidata.models.Product;
+import io.javabrains.springbootquickstart.courseapidata.models.User;
+import io.javabrains.springbootquickstart.courseapidata.repositories.OrderRepository;
+import io.javabrains.springbootquickstart.courseapidata.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class OrderService {
@@ -25,6 +33,24 @@ public class OrderService {
     //user/{user_id}/product/{product_id} DONE
     public void addToCart(Integer user_id,Integer product_id)
     {
+        try
+        {
+            userService.getUser(user_id);
+        }
+        catch(NoSuchElementException e)
+        {
+            throw new UserDoesNotExistException("You can't add to the cart of a user that does not exist.");
+        }
+
+        try
+        {
+            productService.getProduct(product_id);
+        }
+        catch(NoSuchElementException e)
+        {
+            throw new ProductDoesNotExistException("You can't add a product that does not exist to the cart.");
+        }
+
         User user=userService.getUser(user_id);
         List<Order> userOrders=user.getOrders();
         int numberOfUserOrders=userOrders.size();
@@ -74,6 +100,7 @@ public class OrderService {
         Order order= getUserCartOrder(user_id);
         List<Product> productsInOrder=order.getProducts();
         Product product;
+        boolean productFound=false;
         for(int i=0;i<productsInOrder.size();i++)
         {
             if(productsInOrder.get(i).getId()==product_id)
@@ -84,8 +111,15 @@ public class OrderService {
                 int totalPrice=Integer.parseInt(order.getTotal())-price;
                 order.setProducts(productsInOrder);
                 order.setTotal(""+totalPrice);
+                productFound=true;
                 break;
             }
+        }
+
+        if(!productFound)
+        {
+            throw new ProductDoesNotExistException("The product that you are trying to remove from the cart" +
+                    " does not exist in the cart.");
         }
 
         orderRepository.save(order);
@@ -104,12 +138,29 @@ public class OrderService {
     //GET /admin/orders/{id}
     public Order getOrder(Integer order_id)
     {
+        try
+        {
+            orderRepository.findById(order_id).get();
+        }
+        catch(NoSuchElementException e)
+        {
+            throw new OrderDoesNotExistException("No order with the following id "+ order_id+" exists.");
+        }
         return orderRepository.findById(order_id).get();
     }
 
     //GET /user/{user_id}/order
     public Order getUserCartOrder(Integer user_id)
     {
+        try
+        {
+            userService.getUser(user_id);
+        }
+        catch(NoSuchElementException e)
+        {
+            throw new UserDoesNotExistException("The user id that you are trying " +
+                    "to get their cart order does not exist");
+        }
         List<Order> userOrders=userService.getUser(user_id).getOrders();
         for(int i=0;i<userOrders.size();i++)
         {
@@ -122,18 +173,33 @@ public class OrderService {
     //GET /user/{user_id}/order_history
     public List<Order> getAllUserOrders(Integer user_id)
     {
+        try{
+            userService.getUser(user_id);
+        }
+        catch(NoSuchElementException exception) {
+            System.out.println("The user id that you are trying " +
+                  "to get their cart order history does not exist");
+        };
         List<Order> userOrders=userService.getUser(user_id).getOrders();
         return userOrders;
     }
 
     //PUT /user/{user_id}/order
-    public void checkOutOrder(Integer user_id)
+    public Order checkOutOrder(Integer user_id)
     {
-        User user= userService.getUser(user_id);
+        try
+        {
+            userService.getUser(user_id);
+        }
+        catch(NoSuchElementException e)
+        {
+            throw new UserDoesNotExistException("You must be logged in to checkout.");
+        }
         Order order= getUserCartOrder(user_id);
         order.setType("purchased"); //No longer in cart
         orderRepository.save(order);
         userService.updateUser(user_id,userService.getUser(user_id));
+        return order;
     }
 
 }

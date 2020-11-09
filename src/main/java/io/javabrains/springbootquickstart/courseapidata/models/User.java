@@ -1,4 +1,6 @@
-package io.javabrains.springbootquickstart.courseapidata;
+package io.javabrains.springbootquickstart.courseapidata.models;
+
+import io.javabrains.springbootquickstart.courseapidata.models.Order;
 
 import javax.persistence.*;
 import java.util.ArrayList;

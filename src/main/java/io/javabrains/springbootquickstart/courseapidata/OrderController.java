@@ -1,5 +1,8 @@
 package io.javabrains.springbootquickstart.courseapidata;
 
+import io.javabrains.springbootquickstart.courseapidata.interfaces.OrderControllerInterface;
+import io.javabrains.springbootquickstart.courseapidata.models.Order;
+import io.javabrains.springbootquickstart.courseapidata.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +43,9 @@ public class OrderController implements OrderControllerInterface {
         return orderService.getAllUserOrders(user_id);
     }
 
-    public void checkOutOrder(@PathVariable Integer user_id)
+    public Order checkOutOrder(@PathVariable Integer user_id)
     {
-        orderService.checkOutOrder(user_id);
+        return orderService.checkOutOrder(user_id);
     }
 
 }

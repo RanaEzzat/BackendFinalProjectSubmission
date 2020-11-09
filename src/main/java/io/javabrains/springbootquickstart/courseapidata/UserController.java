@@ -1,5 +1,8 @@
 package io.javabrains.springbootquickstart.courseapidata;
 
+import io.javabrains.springbootquickstart.courseapidata.interfaces.UserControllerInterface;
+import io.javabrains.springbootquickstart.courseapidata.models.User;
+import io.javabrains.springbootquickstart.courseapidata.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

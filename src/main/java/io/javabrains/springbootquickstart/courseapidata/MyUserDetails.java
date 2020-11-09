@@ -1,5 +1,6 @@
 package io.javabrains.springbootquickstart.courseapidata;
 
+import io.javabrains.springbootquickstart.courseapidata.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
