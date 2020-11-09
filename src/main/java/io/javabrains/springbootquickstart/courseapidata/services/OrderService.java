@@ -187,6 +187,7 @@ public class OrderService {
     //PUT /user/{user_id}/order
     public Order checkOutOrder(Integer user_id)
     {
+        Order order;
         try
         {
             userService.getUser(user_id);
@@ -195,10 +196,22 @@ public class OrderService {
         {
             throw new UserDoesNotExistException("You must be logged in to checkout.");
         }
-        Order order= getUserCartOrder(user_id);
-        order.setType("purchased"); //No longer in cart
-        orderRepository.save(order);
-        userService.updateUser(user_id,userService.getUser(user_id));
+
+        try
+        {
+            order= getUserCartOrder(user_id);
+            order.setType("purchased"); //No longer in cart
+            orderRepository.save(order);
+            userService.updateUser(user_id,userService.getUser(user_id));
+
+        }
+        catch(NullPointerException e)
+        {
+            throw new OrderDoesNotExistException("You can't check out when your cart is empty.");
+        }
+
+
+
         return order;
     }
 
