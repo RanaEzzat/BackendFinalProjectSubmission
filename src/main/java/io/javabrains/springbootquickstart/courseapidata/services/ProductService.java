@@ -71,8 +71,10 @@ public class ProductService {
         logger.info("Output: false");
         return false;
     }
-    public void addProduct(Product product,Integer admin_id)
+    public void addProduct(Product product,String token)
     {
+        User u=userService.decodeToken(token);
+        Integer admin_id=u.getId();
         logger.info("Entering the method addProduct() in class ProductService:");
         logger.info("Input: product:"+product+" admin_id:"+admin_id);
         if(!(isAdmin(admin_id)))
@@ -87,8 +89,10 @@ public class ProductService {
         logger.info("Output: success");
     }
 
-    public void updateProduct(Integer id,Product product,Integer admin_id)
+    public void updateProduct(Integer id,Product product,String token)
     {
+        User u=userService.decodeToken(token);
+        Integer admin_id=u.getId();
         logger.info("Entering the method updateProduct() in class ProductService:");
         logger.info("Input: id:" +id+" product:"+product+" admin_id:"+admin_id);
         if(!(isAdmin(admin_id)))
@@ -101,8 +105,10 @@ public class ProductService {
         logger.info("Output: success");
     }
 
-    public void deleteProduct(Integer id,Integer admin_id)
+    public void deleteProduct(Integer id,String token)
     {
+        User u=userService.decodeToken(token);
+        Integer admin_id=u.getId();
         logger.info("Entering the method deleteProduct() in class ProductService:");
         logger.info("Input: id:"+id+" admin_id:"+admin_id);
         if(!(isAdmin(admin_id)))

@@ -4,8 +4,14 @@ import io.javabrains.springbootquickstart.courseapidata.interfaces.OrderControll
 import io.javabrains.springbootquickstart.courseapidata.models.Order;
 import io.javabrains.springbootquickstart.courseapidata.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -23,29 +29,30 @@ public class OrderController implements OrderControllerInterface {
         return orderService.getOrder(id);
     }
 
-     public void addToCart(@PathVariable Integer user_id,@PathVariable Integer product_id)
+     public void addToCart(@RequestHeader (name="Authorization") String token, @PathVariable Integer product_id)
     {
-        orderService.addToCart(user_id,product_id);
+        orderService.addToCart(token,product_id);
     }
 
-    public Order getUserCartOrder(@PathVariable Integer user_id)
+    public Order getUserCartOrder(@RequestHeader (name="Authorization") String token)
     {
-        return orderService.getUserCartOrder(user_id);
+        return orderService.getUserCartOrder(token);
     }
 
-    public void removeFromCart(@PathVariable Integer user_id,@PathVariable Integer product_id)
+    public void removeFromCart(@RequestHeader (name="Authorization") String token,@PathVariable Integer product_id)
     {
-        orderService.removeFromCart(user_id,product_id);
+        orderService.removeFromCart(token,product_id);
     }
 
-    public List<Order> getAllUserOrders(@PathVariable Integer user_id)
+    public List<Order> getAllUserOrders(@RequestHeader (name="Authorization") String token)
     {
-        return orderService.getAllUserOrders(user_id);
+        return orderService.getAllUserOrders(token);
     }
 
-    public Order checkOutOrder(@PathVariable Integer user_id)
+    public Order checkOutOrder(@RequestHeader (name="Authorization") String token)
     {
-        return orderService.checkOutOrder(user_id);
+
+        return orderService.checkOutOrder(token);
     }
 
 }

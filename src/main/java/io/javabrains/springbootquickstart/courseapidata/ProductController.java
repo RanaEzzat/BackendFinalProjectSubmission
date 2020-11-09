@@ -4,6 +4,7 @@ import io.javabrains.springbootquickstart.courseapidata.interfaces.ProductContro
 import io.javabrains.springbootquickstart.courseapidata.models.Product;
 import io.javabrains.springbootquickstart.courseapidata.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +24,9 @@ public class ProductController implements ProductControllerInterface {
         return productService.getProduct(id);
     }
 
-    public void addProduct(@RequestBody Product product, @PathVariable Integer admin_id)
+    public void addProduct(@RequestBody Product product,@RequestHeader (name="Authorization") String token)
     {
-        productService.addProduct(product,admin_id);
+        productService.addProduct(product,token);
     }
 
     public List<Product> getProductsForAdmin()
@@ -39,14 +40,14 @@ public class ProductController implements ProductControllerInterface {
         return productService.getProduct(product_id);
     }
 
-    public void updateProduct(@RequestBody Product product,@PathVariable Integer id,@PathVariable Integer admin_id)
+    public void updateProduct(@RequestBody Product product,@PathVariable Integer id,@RequestHeader (name="Authorization") String token)
     {
-        productService.updateProduct(id,product,admin_id);
+        productService.updateProduct(id,product,token);
     }
 
-    public void deleteProduct(@PathVariable Integer id,@PathVariable Integer admin_id)
+    public void deleteProduct(@PathVariable Integer id,@RequestHeader (name="Authorization") String token)
     {
-        productService.deleteProduct(id,admin_id);
+        productService.deleteProduct(id,token);
     }
 
 

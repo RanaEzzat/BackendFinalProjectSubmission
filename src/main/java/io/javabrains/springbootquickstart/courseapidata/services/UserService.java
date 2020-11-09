@@ -7,9 +7,11 @@ import io.javabrains.springbootquickstart.courseapidata.models.User;
 import io.javabrains.springbootquickstart.courseapidata.repositories.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +39,40 @@ public class UserService {
         return users;
     }
 
-    public User getUser(Integer id)
+    public User decodeToken(String token)
+    {
+        System.out.println("HELLLLLLLLLLLO   "+ token);
+        token=token.substring(7);
+        System.out.println("HELLLLLLLLLLLO   "+ token);
+        String payload = token.split("\\.")[1];
+        try {
+            String usernamestr=new String(Base64.decodeBase64(payload),"UTF-8");
+            System.out.println(usernamestr);
+            String sub=usernamestr.split(",")[0];
+            System.out.println(sub);
+            String usersub=sub.split(":")[1];
+            System.out.println(usersub);
+            String username="";
+            for(int i=1;i<usersub.length()-1;i++)
+            {
+                username+=usersub.charAt(i);
+            }
+            System.out.println(username);
+            List<User> users=getAllUsers();
+            for(int i=0;i<users.size();i++)
+            {
+                if(users.get(i).getUserName().equals(username))
+                    return users.get(i);
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public User getUser(int id)
     {
 
         logger.info("Entering the method getUser() in class UserService.");

@@ -33,8 +33,10 @@ public class OrderService {
 
 
     //user/{user_id}/product/{product_id} DONE
-    public void addToCart(Integer user_id,Integer product_id)
+    public void addToCart(String token,Integer product_id)
     {
+        User u=userService.decodeToken(token);
+        Integer user_id=u.getId();
         logger.info("Entering the method addToCart() in class OrderService:");
         logger.info("Inputs: user_id:"+user_id+" product_id: "+product_id);
         try
@@ -101,12 +103,14 @@ public class OrderService {
     }
 
     //DELETE "user/{user_id}/order/{product_oder}"
-    public void removeFromCart(Integer user_id,Integer product_id)
+    public void removeFromCart(String token,Integer product_id)
     {
+        User u=userService.decodeToken(token);
+        Integer user_id=u.getId();
         logger.info("Entering the method removeFromCart() in class OrderService:");
         logger.info("Inputs: user_id:"+user_id+" product_id: "+product_id);
         User user = userService.getUser(user_id);
-        Order order= getUserCartOrder(user_id);
+        Order order= getUserCartOrder(token);
         List<Product> productsInOrder=order.getProducts();
         Product product;
         boolean productFound=false;
@@ -167,8 +171,10 @@ public class OrderService {
     }
 
     //GET /user/{user_id}/order
-    public Order getUserCartOrder(Integer user_id)
+    public Order getUserCartOrder(String token)
     {
+        User u=userService.decodeToken(token);
+        Integer user_id=u.getId();
         logger.info("Entering the method getUserCartOrder() in class OrderService:");
         logger.info("Inputs: user_id:"+user_id);
         try
@@ -195,8 +201,10 @@ public class OrderService {
     }
 
     //GET /user/{user_id}/order_history
-    public List<Order> getAllUserOrders(Integer user_id)
+    public List<Order> getAllUserOrders(String token)
     {
+        User u=userService.decodeToken(token);
+        Integer user_id=u.getId();
         logger.info("Entering the method getAllUserOrders() in class OrderService:");
         logger.info("Inputs: user_id:"+user_id);
         try{
@@ -213,8 +221,10 @@ public class OrderService {
     }
 
     //PUT /user/{user_id}/order
-    public Order checkOutOrder(Integer user_id)
+    public Order checkOutOrder(String token)
     {
+        User u=userService.decodeToken(token);
+        Integer user_id=u.getId();
         logger.info("Entering the method checkOutOrder() in class OrderService:");
         logger.info("Inputs: user_id:"+user_id);
         Order order;
@@ -230,7 +240,7 @@ public class OrderService {
 
         try
         {
-            order= getUserCartOrder(user_id);
+            order= getUserCartOrder(token);
             order.setType("purchased"); //No longer in cart
             orderRepository.save(order);
             userService.updateUser(user_id,userService.getUser(user_id));
