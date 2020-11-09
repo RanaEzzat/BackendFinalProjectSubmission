@@ -8,6 +8,8 @@ import io.javabrains.springbootquickstart.courseapidata.models.Product;
 import io.javabrains.springbootquickstart.courseapidata.models.User;
 import io.javabrains.springbootquickstart.courseapidata.repositories.OrderRepository;
 import io.javabrains.springbootquickstart.courseapidata.repositories.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,18 +29,21 @@ public class OrderService {
     private ProductService productService;
 
 
-
+    private static final Logger logger = LogManager.getLogger(OrderService.class);
 
 
     //user/{user_id}/product/{product_id} DONE
     public void addToCart(Integer user_id,Integer product_id)
     {
+        logger.info("Entering the method addToCart() in class OrderService:");
+        logger.info("Inputs: user_id:"+user_id+" product_id: "+product_id);
         try
         {
             userService.getUser(user_id);
         }
         catch(NoSuchElementException e)
         {
+            logger.error("The method addToCart() returned a UserDoesNotExistException.");
             throw new UserDoesNotExistException("You can't add to the cart of a user that does not exist.");
         }
 
@@ -48,6 +53,7 @@ public class OrderService {
         }
         catch(NoSuchElementException e)
         {
+            logger.error("The method addToCart() returned a ProductDoesNotExistException.");
             throw new ProductDoesNotExistException("You can't add a product that does not exist to the cart.");
         }
 
@@ -91,11 +97,14 @@ public class OrderService {
         }
 
         userService.updateUser(user_id,userService.getUser(user_id));
+        logger.info("Success");
     }
 
     //DELETE "user/{user_id}/order/{product_oder}"
     public void removeFromCart(Integer user_id,Integer product_id)
     {
+        logger.info("Entering the method removeFromCart() in class OrderService:");
+        logger.info("Inputs: user_id:"+user_id+" product_id: "+product_id);
         User user = userService.getUser(user_id);
         Order order= getUserCartOrder(user_id);
         List<Product> productsInOrder=order.getProducts();
@@ -118,46 +127,57 @@ public class OrderService {
 
         if(!productFound)
         {
+            logger.error("The method removeFromCart() returned a ProductDoesNotExistException.");
             throw new ProductDoesNotExistException("The product that you are trying to remove from the cart" +
                     " does not exist in the cart.");
         }
 
         orderRepository.save(order);
         userService.updateUser(user_id,userService.getUser(user_id));
+        logger.info("Success");
     }
 
     //GET /admin/orders/
     public List<Order> getAllOrders()
     {
+        logger.info("Entering the method getAllOrders() in class OrderService:");
         List<Order> orders = new ArrayList<>();
         orderRepository.findAll()
                 .forEach(orders::add);
+        logger.info("Output: "+orders);
         return orders;
     }
 
     //GET /admin/orders/{id}
     public Order getOrder(Integer order_id)
     {
+        logger.info("Entering the method getOrder() in class OrderService:");
+        logger.info("Inputs: order_id:"+order_id);
         try
         {
             orderRepository.findById(order_id).get();
         }
         catch(NoSuchElementException e)
         {
+            logger.error("The method getOrder() returned a OrderDoesNotExistException.");
             throw new OrderDoesNotExistException("No order with the following id "+ order_id+" exists.");
         }
+        logger.info("Output: "+orderRepository.findById(order_id).get());
         return orderRepository.findById(order_id).get();
     }
 
     //GET /user/{user_id}/order
     public Order getUserCartOrder(Integer user_id)
     {
+        logger.info("Entering the method getUserCartOrder() in class OrderService:");
+        logger.info("Inputs: user_id:"+user_id);
         try
         {
             userService.getUser(user_id);
         }
         catch(NoSuchElementException e)
         {
+            logger.error("The method getUserCartOrder() returned a UserDoesNotExistException.");
             throw new UserDoesNotExistException("The user id that you are trying " +
                     "to get their cart order does not exist");
         }
@@ -165,28 +185,38 @@ public class OrderService {
         for(int i=0;i<userOrders.size();i++)
         {
             if(userOrders.get(i).getType().equals("cart"))
+            {
+                logger.info("Output: "+ userOrders.get(i));
                 return userOrders.get(i);
+            }
         }
+
         return null;
     }
 
     //GET /user/{user_id}/order_history
     public List<Order> getAllUserOrders(Integer user_id)
     {
+        logger.info("Entering the method getAllUserOrders() in class OrderService:");
+        logger.info("Inputs: user_id:"+user_id);
         try{
             userService.getUser(user_id);
         }
         catch(NoSuchElementException exception) {
+            logger.error("The method getAllUserOrders() returned a UserDoesNotExistException.");
             System.out.println("The user id that you are trying " +
                   "to get their cart order history does not exist");
         };
         List<Order> userOrders=userService.getUser(user_id).getOrders();
+        logger.info("Output: "+userOrders);
         return userOrders;
     }
 
     //PUT /user/{user_id}/order
     public Order checkOutOrder(Integer user_id)
     {
+        logger.info("Entering the method checkOutOrder() in class OrderService:");
+        logger.info("Inputs: user_id:"+user_id);
         Order order;
         try
         {
@@ -194,6 +224,7 @@ public class OrderService {
         }
         catch(NoSuchElementException e)
         {
+            logger.error("The method checkOutOrder() returned a UserDoesNotExistException.");
             throw new UserDoesNotExistException("You must be logged in to checkout.");
         }
 
@@ -211,7 +242,7 @@ public class OrderService {
         }
 
 
-
+        logger.info("Output: "+order);
         return order;
     }
 
